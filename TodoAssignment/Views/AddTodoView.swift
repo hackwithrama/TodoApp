@@ -24,7 +24,7 @@ struct AddTodoView: View {
                     .autocorrectionDisabled()
                     .foregroundStyle(.primary)
                 LabeledContent{
-                    DatePicker("", selection: $taskDate, in: Date.now..., displayedComponents: .date)
+                    DatePicker("", selection: $taskDate, in: Date.now..., displayedComponents: [.date,.hourAndMinute])
                 }label: {
                     Text("Select date")
                 }

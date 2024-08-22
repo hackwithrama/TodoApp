@@ -15,6 +15,13 @@ struct EditTodoView: View {
     @State private var isImportant = false
     @State private var isCompleted = false
     
+    var changed: Bool{
+        taskName != task.taskName
+        || taskDate != task.taskDate
+        || isCompleted != task.isCompleted
+        || isImportant != task.isImportant
+    }
+    
     var body: some View {
         VStack{
             GroupBox{
@@ -23,10 +30,11 @@ struct EditTodoView: View {
                     .autocorrectionDisabled()
                     .foregroundStyle(.primary)
                 LabeledContent{
-                    DatePicker("", selection: $taskDate, in: Date.now..., displayedComponents: .date)
+                    DatePicker("", selection: $taskDate, in: Date.now..., displayedComponents: [.date,.hourAndMinute])
                 }label: {
-                    Text("Selected date")
+                    Text("Complete by")
                 }
+                .disabled(isCompleted)
                 LabeledContent{
                     Toggle("", isOn: $isImportant)
                 }label: {
@@ -42,8 +50,13 @@ struct EditTodoView: View {
                         .imageScale(.large)
                 }
                 Button("Update"){
+                    task.taskName = taskName
+                    task.taskDate = taskDate
+                    task.isCompleted = isCompleted
+                    task.isImportant = isImportant
                     dismiss()
                 }
+                .disabled(!changed)
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -52,17 +65,17 @@ struct EditTodoView: View {
         }
         .navigationTitle("Edit task")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar{
-            Button("Cancel"){
-                dismiss()
-            }
+        .onAppear{
+            taskName = task.taskName
+            taskDate = task.taskDate
+            isCompleted = task.isCompleted
+            isImportant = task.isImportant
         }
     }
 }
 
 #Preview {
-    let exampleTask = Task(taskName: "Gym", taskDate: Date.now, isImportant: true)
-    return NavigationStack {
-        EditTodoView(task: exampleTask)
+    NavigationStack {
+        EditTodoView(task: Task(taskName: "Service car", taskDate: Date.now, isImportant: true, isCompleted: true))
     }
 }
