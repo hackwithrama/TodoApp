@@ -29,6 +29,7 @@ struct ProgressiveBar: View {
             }
         }
         .padding()
+        .animation(.easeOut(duration: 0.5), value: percentage)
     }
 }
 
