@@ -36,6 +36,7 @@ struct TodoList: View {
         Group{
             if filteredTasks.isEmpty{
                 ContentUnavailableView("Enter your first task", systemImage: "list.bullet.clipboard.fill")
+                    .background(Color.grayLight)
             }else{
                 VStack {
                     List{
@@ -56,11 +57,13 @@ struct TodoList: View {
                                                 Text(task.taskDate, format: .dateTime.day().month().year().hour().minute())
                                                     .font(.footnote)
                                                     .foregroundStyle(.secondary)
+                                                    .strikethrough(task.isCompleted ? true : false)
                                                 Text(task.taskName)
                                                     .foregroundStyle(.grayDark)
                                                     .font(.title2)
                                                     .strikethrough(task.isCompleted ? true : false)
                                             }
+                                            .animation(.linear(duration: 0.5), value: task.isCompleted)
                                             Spacer()
                                             if task.isImportant{
                                                 Image(systemName: "bookmark.fill")
