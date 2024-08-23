@@ -16,13 +16,13 @@ struct ProgressiveBar: View {
     var body: some View {
         let multiplier = width / 100
         VStack(spacing: 2){
-            Text("\(Int(percentage)) % completed")
+            Text("\(Int(percentage))% completed")
                 .foregroundStyle(.grayDark)
                 .fontWeight(.semibold)
             ZStack(alignment: .leading){
                 RoundedRectangle(cornerRadius: height, style: .continuous)
                     .frame(width: width, height: height)
-                    .foregroundColor(.grayLight)
+                    .foregroundColor(.white.opacity(0.5))
                 RoundedRectangle(cornerRadius: height, style: .continuous)
                     .frame(width: percentage * multiplier, height: height)
                     .foregroundStyle(LinearGradient(colors: [.grayLight, .grayMedium, .grayDark], startPoint: .leading, endPoint: .trailing))

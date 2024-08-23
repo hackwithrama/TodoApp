@@ -50,7 +50,11 @@ struct TodoList: View {
                                             }
                                         }
                                     }
+                                    .listRowSeparator(.hidden)
                                 }
+                                .padding(8)
+                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                .listRowBackground(Color.grayLight)
                         }
                         .onDelete(perform: { indexSet in
                             indexSet.forEach{index in
@@ -59,10 +63,12 @@ struct TodoList: View {
                             }
                         })
                     }
-                    .listStyle(.plain)
+                    .background(Color.grayLight)
+                    .scrollContentBackground(.hidden)
                     // MARK: - Progress bar
                     ProgressiveBar(height: 20, percentage: CGFloat(tasks.filter { $0.isCompleted }.count) / CGFloat(tasks.count) * 100)
                 }
+                .background(Color.grayLight)
             }
         }
     }

@@ -24,17 +24,22 @@ struct EditTodoView: View {
     
     var body: some View {
         VStack{
-            GroupBox{
+            GroupBox(label: Label("Edit", systemImage: "pencil.circle.fill").foregroundStyle(Color.grayDark).font(.title3)){
+                
                 TextField("Task", text: $taskName)
                     .textFieldStyle(.roundedBorder)
                     .autocorrectionDisabled()
                     .foregroundStyle(.primary)
+                    .padding(.vertical, 10)
+                
                 LabeledContent{
                     DatePicker("", selection: $taskDate, in: Date.now..., displayedComponents: [.date,.hourAndMinute])
                 }label: {
                     Text("Complete by")
                 }
                 .disabled(isCompleted)
+                .padding(.bottom, 20)
+                
                 LabeledContent{
                     Toggle("", isOn: $isImportant)
                 }label: {
@@ -42,6 +47,8 @@ struct EditTodoView: View {
                         .foregroundStyle(isImportant ? .red : .primary)
                         .imageScale(.large)
                 }
+                .padding(.bottom, 5)
+                
                 LabeledContent{
                     Toggle("", isOn: $isCompleted)
                 }label: {
@@ -49,20 +56,31 @@ struct EditTodoView: View {
                         .foregroundStyle(isCompleted ? .green : .primary)
                         .imageScale(.large)
                 }
-                Button("Update"){
+                .padding(.bottom, 5)
+                
+                Button{
                     task.taskName = taskName
                     task.taskDate = taskDate
                     task.isCompleted = isCompleted
                     task.isImportant = isImportant
                     dismiss()
+                }label: {
+                    Text("Update")
                 }
-                .disabled(!changed)
+                .padding(.vertical, 5)
+                .disabled(!changed || taskName.isEmpty)
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding()
+            .groupBoxStyle(CustomGroupBoxStyle())
+            .overlay{
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.grayMedium, lineWidth: 2)
+            }
             Spacer()
         }
+        .padding()
+        .background(.grayLight)
         .navigationTitle("Edit task")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{

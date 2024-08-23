@@ -18,32 +18,51 @@ struct AddTodoView: View {
     
     var body: some View {
         NavigationStack{
-            GroupBox{
-                TextField("Task", text: $taskName)
-                    .textFieldStyle(.roundedBorder)
-                    .autocorrectionDisabled()
-                    .foregroundStyle(.primary)
-                LabeledContent{
-                    DatePicker("", selection: $taskDate, in: Date.now..., displayedComponents: [.date,.hourAndMinute])
-                }label: {
-                    Text("Select date")
+            VStack {
+                GroupBox(label: Label("Add", systemImage: "plus.circle.fill").foregroundStyle(Color.grayDark).font(.title3)){
+                    
+                    TextField("Task", text: $taskName)
+                        .textFieldStyle(.roundedBorder)
+                        .autocorrectionDisabled()
+                        .foregroundStyle(.primary)
+                        .padding(.vertical, 10)
+                    
+                    LabeledContent{
+                        DatePicker("", selection: $taskDate, in: Date.now..., displayedComponents: [.date,.hourAndMinute])
+                    }label: {
+                        Text("Select date")
+                    }
+                    .padding(.bottom, 20)
+                    
+                    LabeledContent{
+                        Toggle("", isOn: $isImportant)
+                    }label: {
+                        Label("Important", systemImage: isImportant ? "bookmark.fill" : "bookmark.slash")
+                            .foregroundStyle(isImportant ? .red : .primary)
+                    }
+                    .padding(.bottom, 5)
+                    
+                    Button{
+                        let newTask = Task(taskName: taskName, taskDate: taskDate, isImportant: isImportant)
+                        context.insert(newTask)
+                        dismiss()
+                    }label: {
+                        Text("Create")
+                    }
+                    .padding(.vertical, 5)
+                    .buttonStyle(.borderedProminent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .disabled(taskName.isEmpty == true)
                 }
-                LabeledContent{
-                    Toggle("", isOn: $isImportant)
-                }label: {
-                    Label("Important", systemImage: isImportant ? "bookmark.fill" : "bookmark.slash")
-                        .foregroundStyle(isImportant ? .red : .primary)
+                .groupBoxStyle(CustomGroupBoxStyle())
+                .overlay{
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.grayMedium, lineWidth: 2)
                 }
-                Button("Create"){
-                    let newTask = Task(taskName: taskName, taskDate: taskDate, isImportant: isImportant)
-                    context.insert(newTask)
-                    dismiss()
-                }
-                .buttonStyle(.borderedProminent)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                Spacer()
             }
             .padding()
-            Spacer()
+            .background(.grayLight)
             .navigationTitle("New Task")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar{
