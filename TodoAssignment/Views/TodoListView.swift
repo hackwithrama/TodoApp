@@ -12,10 +12,12 @@ struct TodoListView: View {
     @State private var showAddTodoView: Bool = false
     @State private var isTaskCompleted = false
     @State private var showImportantOnly = false
+    @State private var filterTaskByName = ""
     
     var body: some View {
         NavigationStack{
-            TodoList(showImp: $showImportantOnly)
+            TodoList(filterString: filterTaskByName, showImp: $showImportantOnly)
+            .searchable(text: $filterTaskByName, prompt: "Filter task by name")
             .navigationTitle("ToDo")
             .animation(.easeOut(duration: 2), value: showImportantOnly)
             .toolbar{

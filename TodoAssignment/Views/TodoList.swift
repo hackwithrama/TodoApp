@@ -12,16 +12,34 @@ struct TodoList: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \Task.taskDate) private var tasks: [Task]
     
+    init(filterString: String, showImp: Binding<Bool>){
+        
+//        let predicate = #Predicate<Task>{task in
+//            task.taskName.localizedStandardContains(filterString) ||
+//            filterString.isEmpty
+//        }
+        
+        self.filterString = filterString
+        self._showImp = showImp
+//        _tasks = Query(filter: predicate, sort: \Task.taskDate)
+    }
+    
     @Binding var showImp: Bool
+    private var filterString: String
     
     var body: some View {
+        let filteredTasks = tasks.filter { task in
+                    (task.taskName.localizedStandardContains(filterString) || filterString.isEmpty) &&
+                    (!showImp || task.isImportant)
+                }
+        
         Group{
-            if tasks.isEmpty{
+            if filteredTasks.isEmpty{
                 ContentUnavailableView("Enter your first task", systemImage: "list.bullet.clipboard.fill")
             }else{
                 VStack {
                     List{
-                        ForEach(showImp ? tasks.filter{$0.isImportant} : tasks){task in
+                        ForEach(filteredTasks){task in
                                 NavigationLink{
                                     EditTodoView(task: task)
                                 }label: {
@@ -58,7 +76,7 @@ struct TodoList: View {
                         }
                         .onDelete(perform: { indexSet in
                             indexSet.forEach{index in
-                                let task = tasks[index]
+                                let task = filteredTasks[index]
                                 context.delete(task)
                             }
                         })
@@ -74,6 +92,6 @@ struct TodoList: View {
     }
 }
 
-#Preview {
-    TodoList(showImp: .constant(false))
-}
+//#Preview {
+//    TodoList(showImp: .constant(false))
+//}
