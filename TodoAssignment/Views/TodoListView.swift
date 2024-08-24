@@ -19,8 +19,8 @@ struct TodoListView: View {
             TodoList(filterString: filterTaskByName, showImp: showImportantOnly)
             .searchable(text: $filterTaskByName, prompt: "Filter task by name")
             .navigationTitle("ToDo")
-            .animation(.easeOut(duration: 2), value: showImportantOnly)
-            .animation(.easeOut(duration: 2), value: filterTaskByName)
+            .animation(.easeOut(duration: 1), value: showImportantOnly)
+            .animation(.easeOut(duration: 1), value: filterTaskByName)
             .toolbar{
                 ToolbarItem(placement: .topBarTrailing) {
                     Button{
