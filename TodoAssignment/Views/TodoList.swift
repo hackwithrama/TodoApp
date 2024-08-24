@@ -11,6 +11,7 @@ import SwiftData
 struct TodoList: View {
     @Environment(\.modelContext) private var context
     @Query private var tasks: [Task]
+    @Query private var allTasks: [Task]
     
     private var showImp: Bool
     private var filterString: String
@@ -26,7 +27,9 @@ struct TodoList: View {
         
         self.filterString = filterString
         self.showImp = showImp
+        
         _tasks = Query(filter: predicate, sort: sort)
+        _allTasks = Query()
     }
     
     var body: some View {
@@ -90,7 +93,7 @@ struct TodoList: View {
                     .background(Color.grayLight)
                     .scrollContentBackground(.hidden)
                     // MARK: - Progress bar
-                    ProgressiveBar(height: 20, percentage: CGFloat(tasks.filter { $0.isCompleted }.count) / CGFloat(tasks.count) * 100)
+                    ProgressiveBar(height: 20, percentage: CGFloat(allTasks.filter { $0.isCompleted }.count) / CGFloat(allTasks.count) * 100)
                 }
                 .background(Color.grayLight)
             }
