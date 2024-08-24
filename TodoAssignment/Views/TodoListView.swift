@@ -16,7 +16,7 @@ struct TodoListView: View {
     
     var body: some View {
         NavigationStack{
-            TodoList(filterString: filterTaskByName, showImp: $showImportantOnly)
+            TodoList(filterString: filterTaskByName, showImp: showImportantOnly)
             .searchable(text: $filterTaskByName, prompt: "Filter task by name")
             .navigationTitle("ToDo")
             .animation(.easeOut(duration: 2), value: showImportantOnly)
@@ -54,6 +54,10 @@ struct TodoListView: View {
 }
 
 #Preview {
-    TodoListView()
-        .modelContainer(for: Task.self, inMemory: true)
+    let preview = Preview(Task.self)
+    let tasks = Task.sampleTasks
+    preview.addExample(tasks)
+    return TodoListView()
+        .modelContainer(preview.container)
+    
 }

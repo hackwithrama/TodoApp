@@ -9,11 +9,21 @@ import SwiftUI
 
 struct EditTodoView: View {
     @Environment(\.dismiss) private var dismiss
+    
     let task: Task
-    @State private var taskName = ""
-    @State private var taskDate = Date.now
-    @State private var isImportant = false
-    @State private var isCompleted = false
+    
+    @State private var taskName: String
+    @State private var taskDate: Date
+    @State private var isImportant: Bool
+    @State private var isCompleted: Bool
+    
+    init(task: Task) {
+            self.task = task
+            _taskName = State(initialValue: task.taskName)
+            _taskDate = State(initialValue: task.taskDate)
+            _isImportant = State(initialValue: task.isImportant)
+            _isCompleted = State(initialValue: task.isCompleted)
+        }
     
     var changed: Bool{
         taskName != task.taskName
@@ -33,7 +43,7 @@ struct EditTodoView: View {
                     .padding(.vertical, 10)
                 
                 LabeledContent{
-                    DatePicker("", selection: $taskDate, in: Date.now..., displayedComponents: [.date,.hourAndMinute])
+                    DatePicker("", selection: $taskDate, displayedComponents: [.date, .hourAndMinute])
                 }label: {
                     Text("Complete by")
                 }
@@ -83,17 +93,22 @@ struct EditTodoView: View {
         .background(.grayLight)
         .navigationTitle("Edit task")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear{
-            taskName = task.taskName
-            taskDate = task.taskDate
-            isCompleted = task.isCompleted
-            isImportant = task.isImportant
-        }
+//        .onAppear{
+//            taskName = task.taskName
+//            taskDate = task.taskDate
+//            isCompleted = task.isCompleted
+//            isImportant = task.isImportant
+//        }
+        
     }
 }
 
 #Preview {
-    NavigationStack {
-        EditTodoView(task: Task(taskName: "Service car", taskDate: Date.now, isImportant: true, isCompleted: true))
+    let preview = Preview(Task.self)
+    let tasks = Task.sampleTasks
+    preview.addExample(tasks)
+    return NavigationStack{
+        EditTodoView(task: tasks[0])
+            .modelContainer(preview.container)
     }
 }
