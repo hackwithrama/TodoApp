@@ -32,8 +32,14 @@ struct TodoList: View {
     var body: some View {
         Group{
             if tasks.isEmpty{
-                ContentUnavailableView("Enter your first task", systemImage: "list.bullet.clipboard.fill")
-                    .background(Color.grayLight)
+                if !filterString.isEmpty {
+                    ContentUnavailableView("No result found for \"\(filterString)\"", systemImage: "magnifyingglass")
+                        .imageScale(.large)
+                        .background(Color.grayLight)
+                }else{
+                    ContentUnavailableView("Enter your first task", systemImage: "list.bullet.clipboard.fill")
+                        .background(Color.grayLight)
+                }
             }else{
                 VStack {
                     List{
